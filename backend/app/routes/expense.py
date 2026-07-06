@@ -28,3 +28,23 @@ def create_expense():
         "category": expense.category,
         "expense_date": str(expense.expense_date)
     }), 201
+
+
+@expense_bp.route("/expenses", methods=["GET"])
+def get_expenses():
+
+    expenses = Expense.query.all()
+
+    result = []
+
+    for expense in expenses:
+
+        result.append({
+            "id": expense.id,
+            "title": expense.title,
+            "amount": float(expense.amount),
+            "category": expense.category,
+            "expense_date": str(expense.expense_date)
+        })
+
+    return jsonify(result), 200
