@@ -48,3 +48,33 @@ def get_expenses():
         })
 
     return jsonify(result), 200
+
+@expense_bp.route("/expenses/<int:id>", methods=["put"])
+def update_expense(id):
+    expense = Expense.query.get(id)
+
+    if expense is None:
+        return jsonify({
+            "message": "Expense not found"
+        }), 404
+    
+    data = request.get_json()
+
+    if "title" not in data or "amount" not in data:
+        return jsonify({
+            "message": "Title and amount are required"
+        }), 400
+    
+    expense.title = data["title"]
+    expense.amount = data["amount"]
+    expense.category = data.get("category")
+
+    db.session.commit()
+
+    return jsonify({
+        "id": expense.id,
+        "title": expense.title,
+        "amount": float(expense.amount),
+        "category": expense.category,
+        "expense_date": str(expense.expense_date)
+    }), 200
