@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from app.config.database import db
 from app.routes.health import health_bp
+from app.routes.expense import expense_bp
 
 load_dotenv()
 
@@ -25,5 +26,6 @@ def create_app():
         db.init_app(app)
 
         app.register_blueprint(health_bp)
+        app.register_blueprint(expense_bp)
 
         return app
