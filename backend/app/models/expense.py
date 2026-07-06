@@ -1,4 +1,5 @@
 from app.config.database import db
+from datetime import datetime
 
 class Expense(db.Model):
 
@@ -12,6 +13,6 @@ class Expense(db.Model):
 
     category = db.Column(db.String(50))
 
-    expense_date = db.column(db.Date)
+    expense_date = db.Column(db.Date)
 
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
