@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ../backend
+
+    container_name: expense_backend
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - ../backend/.env
+
+    depends_on:
+      - postgres
+
+    volumes:
+      - ../backend:/app
+
+  postgres:
+    image: postgres:17
+
+    container_name: expense_postgres
+
+    environment:
+
+      POSTGRES_DB: expense_tracker
+
+      POSTGRES_USER: postgres
+
+      POSTGRES_PASSWORD: Myburger#300
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
