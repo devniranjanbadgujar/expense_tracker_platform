@@ -3,6 +3,7 @@ from datetime import datetime
 
 from app.config.database import db
 from app.models.expense import Expense
+from app.services import expense_service
 
 expense_bp = Blueprint("expense", __name__)
 
@@ -18,8 +19,7 @@ def create_expense():
         expense_date=datetime.today().date()
     )
 
-    db.session.add(expense)
-    db.session.commit()
+    expense_service.create_expense(expense)
 
     return jsonify({
         "id": expense.id,
@@ -33,7 +33,7 @@ def create_expense():
 @expense_bp.route("/expenses", methods=["GET"])
 def get_expenses():
 
-    expenses = Expense.query.all()
+    expenses = expense_service.get_all_expenses()
 
     result = []
 
@@ -51,7 +51,7 @@ def get_expenses():
 
 @expense_bp.route("/expenses/<int:id>", methods=["put"])
 def update_expense(id):
-    expense = Expense.query.get(id)
+    expense = expense_service.get_expense_by_id(id)
 
     if expense is None:
         return jsonify({
@@ -69,7 +69,7 @@ def update_expense(id):
     expense.amount = data["amount"]
     expense.category = data.get("category")
 
-    db.session.commit()
+    expense_service.update_changes()
 
     return jsonify({
         "id": expense.id,
@@ -82,15 +82,14 @@ def update_expense(id):
 @expense_bp.route("/expenses/<int:id>", methods=["DELETE"])
 def delete_expense(id):
 
-    expense = Expense.query.get(id)
+    expense = expense_service.get_expense_by_id(id)
 
     if expense is None:
         return jsonify({
             "message": "Expense not found"
         }), 404
     
-    db.session.delete(expense)
-    db.session.commit()
+    expense_service.delete_expense(expense)
 
     return jsonify({
         "message": "Expense deleted successfully"
