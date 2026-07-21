@@ -3,26 +3,28 @@ from platform_utils.config import (
     HEALTH_ENDPOINT,
     REQUEST_TIMEOUT,
 )
+
 import requests
+from platform_utils.logger import logger
 
 def check_health():
     url = API_BASE_URL + HEALTH_ENDPOINT
-    print(f"Checking: {url}")
+    logger.info(f"Calling URL: {url}")
     response = requests.get(
         url,
         timeout=REQUEST_TIMEOUT
     )
 
     print(response.status_code)
-    print(response.json()["status"])
+    logger.debug(response.json()["status"])
 
     if response.status_code == 200:
 
-        print("PASS")
+        logger.info("Health Check Passed")
 
     else:
         
-        print("FAIL")
+        logger.error("FAIL")
 
 check_health()
 
