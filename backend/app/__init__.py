@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 from app.config.database import db
 from app.routes.health import health_bp
@@ -12,6 +13,11 @@ load_dotenv()
 def create_app():
 
         app = Flask(__name__)
+
+        CORS(
+                app,
+                origins=["http://localhost:5173"]
+        )
 
         app.config["SQLALCHEMY_DATABASE_URI"] = (
                 f"postgresql://{os.getenv('DB_USER')}:"

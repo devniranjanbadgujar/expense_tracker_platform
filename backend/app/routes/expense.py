@@ -11,7 +11,42 @@ expense_bp = Blueprint("expense", __name__)
 def create_expense():
 
     data = request.get_json()
+    
+    if not data:
+        return jsonify({
+            "success" : False,
+            "message" : "Request body is required."
+        }), 400
+    
+    required_fields = ["title", "amount", "category"]
 
+    for field in required_fields:
+        if field not in data:
+            return jsonify({
+                "success": False,
+                "message": f"{field} is required."
+            }), 400
+        
+    if not data["title"].strip():
+        return jsonify({
+            "success": False,
+            "message": "Title cannot be empty."
+        }), 400
+    
+    try:
+        amount = float(data["amount"])
+    except (TypeError, ValueError):
+        return jsonify({
+            "success": False,
+            "message": "Amount must be numeric."
+        }), 400
+    
+    if amount <= 0:
+        return jsonify({
+            "success": False,
+            "message": "Amount must be greater than zero."
+        }), 400
+    
     expense = Expense(
         title=data["title"],
         amount=data["amount"],
