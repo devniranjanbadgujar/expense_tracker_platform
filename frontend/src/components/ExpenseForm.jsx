@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function ExpenseForm() {
+function ExpenseForm({ onExpenseAdded }) {
 
     const [title, setTitle] = useState("");
 
@@ -38,6 +38,8 @@ function ExpenseForm() {
             console.log(result);
 
             alert("Expense added successfully");
+
+            onExpenseAdded();
 
             setTitle("");
             setAmount("");
