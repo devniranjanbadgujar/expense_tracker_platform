@@ -42,6 +42,8 @@ function App() {
         />
       <ExpenseList 
         expenses={expenses}
+
+        onExpenseDeleted={loadExpenses}
         />
     </div>
   );
