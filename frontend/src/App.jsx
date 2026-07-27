@@ -26,8 +26,13 @@ function App() {
 
         setError("");
 
-        try {
+        console.log(import.meta.env);
+        console.log(import.meta.env.VITE_API_URL);
 
+        try {
+            console.log(import.meta.env);
+            console.log(import.meta.env.VITE_API_URL);
+            console.log(import.meta.env.VITE_API_URL);
             const response = await fetch(`${import.meta.env.VITE_API_URL}/expenses`);
             
             if (!response.ok) {
