@@ -16,7 +16,7 @@ function ExpenseList({ expenses, loading, error, onExpenseDeleted, onExpenseEdit
         try{
 
             const response = await fetch(
-                `http://localhost:5000/expenses/${id}`,
+                `${import.meta.env.VITE_API_URL}/expenses/${id}`,
 
                 {
                     method:"DELETE"
@@ -58,7 +58,7 @@ function ExpenseList({ expenses, loading, error, onExpenseDeleted, onExpenseEdit
         return <h2>No Expenses found.</h2>
     }
 
-    
+
     return (
 
         <div>

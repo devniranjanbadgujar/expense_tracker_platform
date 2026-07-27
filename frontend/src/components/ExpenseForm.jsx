@@ -53,8 +53,8 @@ function ExpenseForm({ selectedExpense, onExpenseAdded, onCancelEdit }) {
         try {
 
             const url = selectedExpense
-                ? `http://localhost:5000/expenses/${selectedExpense.id}`
-                : "http://localhost:5000/expenses";
+                ? `${import.meta.env.VITE_API_URL}/expenses/${selectedExpense.id}`
+                : `${import.meta.env.VITE_API_URL}/expenses`;
 
             const method = selectedExpense
 

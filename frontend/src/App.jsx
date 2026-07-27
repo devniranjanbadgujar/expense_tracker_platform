@@ -28,7 +28,7 @@ function App() {
 
         try {
 
-            const response = await fetch("http://localhost:5000/expenses");
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/expenses`);
             
             if (!response.ok) {
 
