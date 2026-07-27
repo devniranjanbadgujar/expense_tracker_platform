@@ -1,6 +1,6 @@
 import React from "react";
 
-function ExpenseList({ expenses, onExpenseDeleted }) {
+function ExpenseList({ expenses, loading, error, onExpenseDeleted, onExpenseEdit }) {
 
     async function deleteExpense(id){
 
@@ -37,9 +37,27 @@ function ExpenseList({ expenses, onExpenseDeleted }) {
             console.error(error);
 
             alert("Unable to delete expense.");
-            
+
         }
     }
+    
+    if (loading) {
+
+        return <h2>Loading Expenses....</h2>;
+
+    }
+
+    if (error) {
+
+        return <h2>{error}</h2>;
+
+    }
+
+    if (expenses.length === 0){
+
+        return <h2>No Expenses found.</h2>
+    }
+
     
     return (
 
@@ -58,6 +76,13 @@ function ExpenseList({ expenses, onExpenseDeleted }) {
                         <p>₹ {expense.amount}</p>
 
                         <p>{expense.category}</p>
+
+                        <button
+
+                            onClick={() => onExpenseEdit(expense)}
+                            >
+                                Edit
+                            </button>
 
                         <button
                             onClick={() => deleteExpense(expense.id)}

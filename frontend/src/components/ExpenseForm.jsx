@@ -1,12 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function ExpenseForm({ onExpenseAdded }) {
+
+function ExpenseForm({ selectedExpense, onExpenseAdded, onCancelEdit }) {
 
     const [title, setTitle] = useState("");
 
     const [amount, setAmount] = useState("");
 
     const [category, setCategory] = useState("");
+
+    useEffect(() => {
+
+        if(selectedExpense){
+
+            setTitle(selectedExpense.title);
+
+            setAmount(selectedExpense.amount);
+
+            setCategory(selectedExpense.category);
+
+        }
+        else {
+
+            setTitle("");
+            setAmount("");
+            setCategory("");
+        }
+
+    }, [selectedExpense]);
+
+    function cancelEdit() {
+
+        setTitle("");
+        setAmount("");
+        setCategory("");
+        onCancelEdit();
+
+        
+    }
 
     async function handleSubmit(event) {
 
@@ -21,23 +52,39 @@ function ExpenseForm({ onExpenseAdded }) {
 
         try {
 
-            const response = await fetch("http://localhost:5000/expenses",{
+            const url = selectedExpense
+                ? `http://localhost:5000/expenses/${selectedExpense.id}`
+                : "http://localhost:5000/expenses";
 
-                method: "POST",
+            const method = selectedExpense
 
-                headers: {
+                ? "PUT"
+                : "POST";
+
+            const response = await fetch(
+
+                url,
+                {
+                    method,
+
+                    headers: {
 
                     "Content-Type": "application/json"
                 },
 
                 body: JSON.stringify(expense)
-            });
+
+                }
+            );
 
             const result = await response.json();
 
             console.log(result);
 
-            alert("Expense added successfully");
+            alert(
+                selectedExpense
+                ?"Expense updated successfully"
+                :"Expense added successfully");
 
             onExpenseAdded();
 
@@ -59,7 +106,7 @@ function ExpenseForm({ onExpenseAdded }) {
 
         <form onSubmit={handleSubmit}>
 
-            <h2>Add Expense</h2>
+            <h2>{selectedExpense ? "Update Expense" : "Add Expense"}</h2>
 
             <input
 
@@ -103,9 +150,29 @@ function ExpenseForm({ onExpenseAdded }) {
 
             <br /> <br />
 
-            <button type="submit ">
-                Add Expense
-            </button>
+            <div style={{ marginTop: "15px" }}>
+
+                <button type="submit">
+
+                    {selectedExpense
+                        ? "Update Expense"
+                        : "Add Expense"}
+
+                </button>
+
+                {selectedExpense && (
+
+                    <button
+                        type="button"
+                        onClick={cancelEdit}
+                        style={{ marginLeft: "10px" }}
+                    >
+                        Cancel
+                    </button>
+
+                )}
+
+            </div>
 
         </form>
 

@@ -2,7 +2,7 @@ from app.config.database import db
 from app.models.expense import Expense
 
 def get_all_expenses():
-    return Expense.query.all()
+    return Expense.query.order_by(Expense.id).all()
 
 def get_expense_by_id(expense_id):
     return Expense.query.get(expense_id)
